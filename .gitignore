@@ -1,0 +1,6 @@
+*.un~
+.DS_Store
+__pycache__/
+*.pdf
+*.pyc
+*.dat
