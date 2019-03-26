@@ -1,8 +1,8 @@
 from __future__ import print_function
 
 import numpy as np
-from turbulence import VelocityGrid
-from uniform_sphere import Sphere
+from libs.turbulence import VelocityGrid
+from libs.uniform_sphere import Sphere
 from libs.const import G, msol, parsec
 from libs.utils import save_particles
 
