@@ -13,7 +13,7 @@ if __name__ == "__main__":
     op = OptionsParser()
     args = op.get_args()
 
-    Mcloud = args.mass* msol
+    Mcloud = args.mass * msol
     Rcloud = args.radius * parsec
     N = args.num
     print("We want {:d} gas cells to represent the cloud".format(N))
@@ -26,18 +26,16 @@ if __name__ == "__main__":
     cloud = Sphere(N=N, center=r_com, radius=Rcloud)
     dx = cloud.dx
 
-    # produce the velocity grid for turbulent ICs
-    vg = VelocityGrid(xmax=2*Rcloud, dx=dx)
-
     pos = cloud.pos
     Ngas = cloud.Npart
     mpart = Mcloud / Ngas
     mass = np.full(Ngas, mpart)
     ids = np.arange(1, Ngas+1)
     u = np.zeros(Ngas)
-
     vel = np.zeros((Ngas, 3))
 
+    # produce the velocity grid for turbulent ICs
+    vg = VelocityGrid(xmax=2*Rcloud, dx=dx)
     vg.coordinate_grid(xstart=r_com[0]-Rcloud, xend=r_com[0]+Rcloud)
     vel = vg.add_turbulence(pos=pos, vel=vel)
 

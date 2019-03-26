@@ -28,13 +28,13 @@ class OptionsParser:
         self.parser.add_argument("-m", "-mass",
                             dest     = "mass",
                             type     = float,
-                            help     = "Total gas mass",
+                            help     = "Total gas mass (in solar masses)",
                             default  = 1.)
 
         self.parser.add_argument("-r", "-radius",
                             dest     = "radius",
                             type     = float,
-                            help     = "Radius of the sphere",
+                            help     = "Radius of the spherei (in parsecs)",
                             default  = 1.)
 
     def get_args(self):
