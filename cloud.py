@@ -5,13 +5,17 @@ from libs.turbulence import VelocityGrid
 from libs.uniform_sphere import Sphere
 from libs.const import G, msol, parsec
 from libs.utils import save_particles
+from libs.options_parser import OptionsParser
 
 
 if __name__ == "__main__":
 
-    Mcloud = 1e4*msol
-    Rcloud = 1*parsec
-    N = 10000 # desired number of cells to represent cloud
+    op = OptionsParser()
+    args = op.get_args()
+
+    Mcloud = args.mass* msol
+    Rcloud = args.radius * parsec
+    N = args.num
     print("We want {:d} gas cells to represent the cloud".format(N))
 
     # where we want to place the cloud's center of mass
@@ -23,12 +27,14 @@ if __name__ == "__main__":
     dx = cloud.dx
 
     # produce the velocity grid for turbulent ICs
-    vg = VelocityGrid(xmax=2*Rcloud, dx=dx, N=128)
+    vg = VelocityGrid(xmax=2*Rcloud, dx=dx)
 
     pos = cloud.pos
     Ngas = cloud.Npart
     mpart = Mcloud / Ngas
     mass = np.full(Ngas, mpart)
+    ids = np.arange(1, Ngas+1)
+    u = np.zeros(Ngas)
 
     vel = np.zeros((Ngas, 3))
 
@@ -43,9 +49,10 @@ if __name__ == "__main__":
     Avel = np.sqrt(Epot/(2*Ekin))
     vel *= Avel
 
+    print("Writing output file {}...".format(args.outfile))
+    save_particles(ids, pos, vel, mass, u, args.outfile, args.format)
 
-    save_particles(pos, vel, mass, 'ics_cloud.dat')
-
+    print("done...bye!")
 
 
 
