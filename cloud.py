@@ -35,8 +35,9 @@ if __name__ == "__main__":
     vel = np.zeros((Ngas, 3))
 
     # produce the velocity grid for turbulent ICs
-    vg = VelocityGrid(xmax=2*Rcloud, dx=dx)
+    vg = VelocityGrid(xmax=2*Rcloud, dx=dx, npow=args.npow, ngrid=args.ngrid)
     vg.coordinate_grid(xstart=r_com[0]-Rcloud, xend=r_com[0]+Rcloud)
+    print("Adding turbulent velocity to particles.")
     vel = vg.add_turbulence(pos=pos, vel=vel)
 
     # now we need to normalize the velocity values

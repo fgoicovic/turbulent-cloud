@@ -31,10 +31,23 @@ class OptionsParser:
                             help     = "Total gas mass (in solar masses)",
                             default  = 1.)
 
+        self.parser.add_argument("-npow",
+                            dest     = "npow",
+                            type     = float,
+                            help     = "Power index of the power spectrum",
+                            default  = 4.)
+
+        self.parser.add_argument("-ngrid",
+                            dest     = "ngrid",
+                            type     = int,
+                            help     = "Number of grid points per dimension for"+\
+                                        " the turbulent velocity field",
+                            default  = 256)
+
         self.parser.add_argument("-r", "-radius",
                             dest     = "radius",
                             type     = float,
-                            help     = "Radius of the spherei (in parsecs)",
+                            help     = "Radius of the sphere (in parsecs)",
                             default  = 1.)
 
     def get_args(self):

@@ -3,8 +3,9 @@ A uniform spherical distribution of particles with turbulent velocity field.
 
 The code first produces a uniform sphere in a close-packed distribution. Then, it
 assigns each particle a random velocity such that the cloud has a turbulent velocity
-field with a given power spectrum. The default power index used is npow=4, which is
-consistent with the observe velocity distribution of molecular clouds (Larson 1981).
+field with a given power spectrum. The default power index is npow=4, which is
+consistent with the observed velocity distribution of molecular clouds
+(Larson 1981).
 
 This code is **under development**.
 
