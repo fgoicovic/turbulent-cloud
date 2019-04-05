@@ -1,6 +1,6 @@
 from __future__ import print_function
 
-from sys import exc_info
+from sys import exc_info, exit
 import numpy as np
 from logging import warning
 from struct import pack
@@ -30,9 +30,9 @@ def save_particles(ids, pos, vel, mass, u, outfile, format):
             rx = '% 3.8e' % pos[i][0]
             ry = '% 3.8e' % pos[i][1]
             rz = '% 3.8e' % pos[i][2]
-            vx = '% 3.8e' % pos[i][0]
-            vy = '% 3.8e' % pos[i][1]
-            vz = '% 3.8e' % pos[i][2]
+            vx = '% 3.8e' % vel[i][0]
+            vy = '% 3.8e' % vel[i][1]
+            vz = '% 3.8e' % vel[i][2]
             ue = '% 3.8e' % u[i]
 
             # Right-align the strings
@@ -111,3 +111,6 @@ def save_particles(ids, pos, vel, mass, u, outfile, format):
             f.write(pack('f' * len(u), *u))
             f.write(pack('i', nbytes))
 
+    else:
+        print("Format {} unknown or not implemented. Exiting.".format(format))
+        exit()
