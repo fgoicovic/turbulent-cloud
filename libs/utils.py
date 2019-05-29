@@ -3,11 +3,22 @@ from __future__ import print_function
 from sys import exc_info, exit
 import numpy as np
 from logging import warning
+from libs.const import G, msol, parsec
 from struct import pack
 
-def save_particles(ids, pos, vel, mass, u, outfile, format):
+def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
     N = len(pos)
+    # conversion for diffenet Units
+
+    if units > 0 :
+        if units == 1 :
+            print("[Output Units Parsec / Msun / km/s]")
+            pos = pos / parsec
+            mass = mass / msol
+            vel = vel * 1E-5
+    else :
+        print("[Output Units CGS]")
 
     if format == 0:
         # Openning file

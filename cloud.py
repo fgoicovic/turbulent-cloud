@@ -49,7 +49,7 @@ if __name__ == "__main__":
     vel *= Avel
 
     print("Writing output file {}...".format(args.outfile))
-    save_particles(ids, pos, vel, mass, u, args.outfile, args.format)
+    save_particles(ids, pos, vel, mass, u, args.outfile, args.format, args.units)
 
     print("done...bye!")
 

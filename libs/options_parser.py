@@ -49,6 +49,12 @@ class OptionsParser:
                             type     = float,
                             help     = "Radius of the sphere (in parsecs)",
                             default  = 1.)
+        
+        self.parser.add_argument("-u", "-units",
+                            dest     = "units",
+                            type     = int,
+                            help     = "Output units (default CGS)",
+                            default  = 0.)
 
     def get_args(self):
         return self.parser.parse_args()
