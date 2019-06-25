@@ -3,22 +3,23 @@ from __future__ import print_function
 from sys import exc_info, exit
 import numpy as np
 from logging import warning
-from libs.const import G, msol, parsec
 from struct import pack
+
+from const import msol, parsec
 
 def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
     N = len(pos)
     # conversion for diffenet Units
-
-    if units > 0 :
-        if units == 1 :
-            print("[Output Units Parsec / Msun / km/s]")
-            pos = pos / parsec
-            mass = mass / msol
-            vel = vel * 1E-5
-    else :
+    if units:
+        print("[Output Units Parsec / Msun / km/s]")
+        pos  /= parsec
+        mass /= msol
+        vel  /= 1.e5
+        u    /= 1.e10
+    else:
         print("[Output Units CGS]")
+
 
     if format == 0:
         # Openning file
@@ -140,16 +141,16 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
 
         with open(outfile, 'wb') as f:
-            
+
             nbytes  = 256
             nbytes4 = 8
-            
+
             f.write(pack('i', nbytes4))
             f.write(b'HEAD')
             f.write(pack('i', nbytes + 8))
             f.write(pack('i', nbytes4))
             # Header
-            
+
             f.write(pack('i', nbytes))
             f.write(pack('i' * len(Npart), *Npart))
             f.write(pack('d' * len(Nmass), *Nmass))
@@ -167,7 +168,7 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(b'POS ')
             f.write(pack('i', nbytes + 8))
             f.write(pack('i', nbytes4))
-            
+
             f.write(pack('i', nbytes))
             f.write(pack('f' * len(pos), *pos))
             f.write(pack('i', nbytes))
@@ -177,7 +178,7 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(b'VEL ')
             f.write(pack('i', nbytes + 8))
             f.write(pack('i', nbytes4))
-            
+
             f.write(pack('i', nbytes))
             f.write(pack('f' * len(vel), *vel))
             f.write(pack('i', nbytes))
@@ -199,7 +200,7 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(b'MASS')
             f.write(pack('i', nbytes+8))
             f.write(pack('i', nbytes4))
-            
+
             f.write(pack('i', nbytes))
             f.write(pack('f' * len(mass), *mass))
             f.write(pack('i', nbytes))

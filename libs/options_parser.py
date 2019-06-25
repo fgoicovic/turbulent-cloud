@@ -10,7 +10,7 @@ class OptionsParser:
         self.parser.add_argument("-N", "-n",
                             dest     = "num",
                             type     = int,
-                            help     = "Number of particles",
+                            help     = "Number of particles (required)",
                             required = True)
 
         self.parser.add_argument("-o",
@@ -22,8 +22,10 @@ class OptionsParser:
         self.parser.add_argument("-format",
                             dest    = "format",
                             type    = int,
-                            help    = "Format of output file. 0 = ASCII, 1 = Gadget binary (format 1)",
-                            default = 1 )
+                            help    = "Format of output file.\n0 = ASCII,\n"+\
+                                       "1 = Gadget binary format 1,\n"+\
+                                       "2 = Gadget binary format 2",
+                            default = 1)
 
         self.parser.add_argument("-m", "-mass",
                             dest     = "mass",
@@ -40,8 +42,8 @@ class OptionsParser:
         self.parser.add_argument("-ngrid",
                             dest     = "ngrid",
                             type     = int,
-                            help     = "Number of grid points per dimension for"+\
-                                        " the turbulent velocity field",
+                            help     = "Number of grid points per dimension for\n"+\
+                                        "the turbulent velocity field",
                             default  = 256)
 
         self.parser.add_argument("-r", "-radius",
@@ -49,12 +51,12 @@ class OptionsParser:
                             type     = float,
                             help     = "Radius of the sphere (in parsecs)",
                             default  = 1.)
-        
-        self.parser.add_argument("-u", "-units",
+
+        self.parser.add_argument("--units",
                             dest     = "units",
-                            type     = int,
-                            help     = "Output units (default CGS)",
-                            default  = 0.)
+                            help     = "Change units to Msol/Parsec/km s^{-1} ",
+                            action   = "store_true")
 
     def get_args(self):
         return self.parser.parse_args()
+
