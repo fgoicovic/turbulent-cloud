@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 from sys import exc_info, exit
-import numpy as np
+from numpy import array, zeros, int
 from logging import warning
 from struct import pack
 
@@ -9,7 +9,7 @@ from const import msol, parsec
 
 def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
-    N = len(pos)
+    n = len(pos)
     # conversion for diffenet Units
     if units:
         print("[Output Units Parsec / Msun / km/s]")
@@ -32,10 +32,10 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             print("Unexpected error: {}".format(sys.exc_info()[0]))
             raise
 
-        id_space = len("{}".format(N))
+        id_space = len("{}".format(n))
 
         # Preparing every line to print to the file
-        for i in range(N):
+        for i in range(n):
             # Formatting particle attributes
             ie = '% d' % ids[i]
             me = '% 3.8e' % mass[i]
@@ -65,32 +65,32 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
         ofile.close()
 
     elif format == 1:
-        Ngas = len(mass)
-        Npart = np.array([Ngas, 0, 0, 0, 0, 0])
-        Nmass = np.array([mass[0], 0, 0, 0, 0, 0])
+        ngas = len(mass)
+        npart = array([ngas, 0, 0, 0, 0, 0])
+        Nmass = array([mass[0], 0, 0, 0, 0, 0])
         # Linearizing the 3D-array of the position and velocity
         pos = pos.ravel()
         vel = vel.ravel()
 
-        dummy = np.zeros(Npart[0])
+        dummy = zeros(npart[0])
         time = 0.
         redshift = 0.0  # double
         flag_sfr = 0  # long
         flag_feedback = 0  # long
         bytesleft = 256 - 6*4 - 6*8 - 8 - 8 - 2*4 - 6*4
-        fill = np.zeros(int(bytesleft/4.0), dtype=np.int)  # int
+        fill = zeros(int(bytesleft/4.0), dtype=int)  # int
 
         with open(outfile, 'wb') as f:
             nbytes = 256
             # Header
             f.write(pack('i', nbytes))
-            f.write(pack('i' * len(Npart), *Npart))
+            f.write(pack('i' * len(npart), *npart))
             f.write(pack('d' * len(Nmass), *Nmass))
             f.write(pack('d', time))
             f.write(pack('d', redshift))
             f.write(pack('i', flag_sfr))
             f.write(pack('i', flag_feedback))
-            f.write(pack('i' * len(Npart), *Npart))
+            f.write(pack('i' * len(npart), *npart))
             f.write(pack('i' * len(fill), *fill))
             f.write(pack('i', nbytes))
 
@@ -124,20 +124,20 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(pack('i', nbytes))
 
     elif format == 2:
-        Ngas = len(mass)
-        Npart = np.array([Ngas, 0, 0, 0, 0, 0])
-        Nmass = np.array([mass[0], 0, 0, 0, 0, 0])
+        ngas = len(mass)
+        npart = array([ngas, 0, 0, 0, 0, 0])
+        Nmass = array([mass[0], 0, 0, 0, 0, 0])
         # Linearizing the 3D-array of the position and velocity
         pos = pos.ravel()
         vel = vel.ravel()
 
-        dummy = np.zeros(Npart[0])
+        dummy = zeros(npart[0])
         time = 0.
         redshift = 0.0  # double
         flag_sfr = 0  # long
         flag_feedback = 0  # long
         bytesleft = 256 - 6*4 - 6*8 - 8 - 8 - 2*4 - 6*4
-        fill = np.zeros(int(bytesleft/4.0), dtype=np.int)  # int
+        fill = zeros(int(bytesleft/4.0), dtype=int)  # int
 
 
         with open(outfile, 'wb') as f:
@@ -152,13 +152,13 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             # Header
 
             f.write(pack('i', nbytes))
-            f.write(pack('i' * len(Npart), *Npart))
+            f.write(pack('i' * len(npart), *npart))
             f.write(pack('d' * len(Nmass), *Nmass))
             f.write(pack('d', time))
             f.write(pack('d', redshift))
             f.write(pack('i', flag_sfr))
             f.write(pack('i', flag_feedback))
-            f.write(pack('i' * len(Npart), *Npart))
+            f.write(pack('i' * len(npart), *npart))
             f.write(pack('i' * len(fill), *fill))
             f.write(pack('i', nbytes))
 

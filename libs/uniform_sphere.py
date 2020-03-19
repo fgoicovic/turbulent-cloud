@@ -1,42 +1,44 @@
 from __future__ import print_function
 
-import numpy as np
+from numpy import pi
+from numpy import floor, array, mgrid, concatenate, where
+from numpy import linalg
 
 class Sphere:
     """ Class for creating a uniform distribution of particles in a close-packed
         sphere.
 
         Arguments:
-            N: total number of desired points to represent the sphere
+            n: total number of desired points to represent the sphere
             center: coordinates of the sphere's center (with units)
             radius: sphere's radius (with units)
     """
-    def __init__(self, N=10000, center=[0.,0.,0.], radius=1.):
+    def __init__(self, n=10000, center=[0.,0.,0.], radius=1.):
 
         # first we create a cube with uniform distribution, hence we need to sample
         # more particles than the desired N
-        side = 2*radius
-        Ncube = 6/np.pi * N # 6/pi is the ratio between sphere and cube volume
-        Nside = int(np.floor((Ncube/4.)**(1./3)))
-        Naux = Nside**3
+        side   = 2*radius
+        ncube  = 6/pi * n # 6/pi is the ratio between sphere and cube volume
+        nside  = int(floor((ncube/4.)**(1./3)))
+        naux   = nside**3
 
-        h = side / Nside
-        center = np.array(center)
-        start = center-radius
+        h      = side / nside
+        center = array(center)
+        start  = center-radius
 
-        z3 = np.mgrid[0:Nside, 0:Nside, 0:Nside].T.reshape(Naux, 3)
-        grid = (np.concatenate((z3, z3+[0.5, 0.5, 0], z3+[0, 0.5, 0.5],
-                z3+[0.5, 0, 0.5])) + 0.25)/Nside * side
+        z3     = mgrid[0:nside, 0:nside, 0:nside].T.reshape(naux, 3)
+        grid   = (concatenate((z3, z3+[0.5, 0.5, 0], z3+[0, 0.5, 0.5],
+                  z3+[0.5, 0, 0.5])) + 0.25)/nside * side
 
-        pos = start + grid
-        r = np.linalg.norm(pos, axis=1)
+        pos    = start + grid
+        r      = linalg.norm(pos, axis=1)
 
-        ig = np.where(r <= radius)[0]
-        pos = pos[ig]
-        Npart = len(ig)
-        print("We placed {:d} gas cells in a close-packed sphere.".format(Npart))
+        ig     = where(r <= radius)[0]
+        pos    = pos[ig]
+        npart  = len(ig)
+        print("We placed {:d} gas cells in a close-packed sphere.".format(npart))
 
-        self.Npart  = Npart
+        self.npart  = npart
         self.dx     = h
         self.pos    = pos
         self.r      = radius

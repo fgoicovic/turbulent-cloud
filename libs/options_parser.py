@@ -1,11 +1,10 @@
-import argparse
-import textwrap
+from argparse import ArgumentParser, RawTextHelpFormatter
 
 class OptionsParser:
     def __init__(self):
-        self.parser = argparse.ArgumentParser(description=
+        self.parser = ArgumentParser(description=
                 'Generate a sphere of particles with a turbulent velocity field.',
-                formatter_class=argparse.RawTextHelpFormatter)
+                formatter_class=RawTextHelpFormatter)
 
         self.parser.add_argument("-N", "-n",
                             dest     = "num",

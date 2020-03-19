@@ -1,6 +1,7 @@
 from __future__ import print_function
 
-import numpy as np
+from numpy import sqrt
+
 # all constants in cgs
 
 # gravitational constant
@@ -40,8 +41,8 @@ ev2erg = 1.602177e-12 # [ erg eV^-1 ]
 parsec = 3.08568025e18 # [ cm ]
 
 # conversion factor for cosmological magnetic field
-bfac = np.sqrt(1e10 * msol) / np.sqrt(1e6 * parsec) * 1e5 / (1e6 * parsec)
+bfac = sqrt(1e10 * msol) / sqrt(1e6 * parsec) * 1e5 / (1e6 * parsec)
 
 # golden ratio for image heights
-golden_ratio = (np.sqrt(5)-1)/2
+golden_ratio = (sqrt(5)-1)/2
 
