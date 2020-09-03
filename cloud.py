@@ -16,6 +16,7 @@ if __name__ == "__main__":
     mcloud = args.mass * msol
     rcloud = args.radius * parsec
     n      = args.num
+    alpha  = args.alpha
     print("We want {:d} gas cells to represent the cloud".format(n))
 
     # where we want to place the cloud's center of mass
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     v2   = np.linalg.norm(vel, axis=1)**2
     ekin = np.sum(0.5*mpart*v2)
     epot = 3./5. * G * mcloud**2 / rcloud
-    kvel = np.sqrt(epot/(2*ekin))
+    kvel = np.sqrt(alpha*epot/ekin)
     vel *= kvel
 
     print("Writing output file {}...".format(args.outfile))

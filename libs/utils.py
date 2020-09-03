@@ -5,7 +5,7 @@ from numpy import array, zeros, int
 from logging import warning
 from struct import pack
 
-from const import msol, parsec
+from libs.const import msol, parsec
 
 def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
