@@ -23,7 +23,7 @@ class VelocityGrid:
            seed : number that determines the random realization.
     """
 
-    def __init__(self, npow=4., ngrid=256, xmax=1., dx=0.01, seed=27021987):
+    def __init__(self, npow=-4., ngrid=256, xmax=1., dx=0.01, seed=27021987):
 
         start = time()
         print("Creating 3-D velocity grid with power spectrum P_k~k**{}".\
@@ -51,17 +51,17 @@ class VelocityGrid:
         # an incompresible velocity field
         xi1 = random.random(size=kk.shape)
         xi2 = random.random(size=kk.shape)
-        c   = kk**(-(npow+2.)/4.)*sqrt(-log(1-xi1))
+        c   = kk**((npow-2.)/4.)*sqrt(-log(1-xi1))
         phi = 2*pi*xi2
         akx = c*exp(1j*phi)
         xi1 = random.random(size=kk.shape)
         xi2 = random.random(size=kk.shape)
-        c   = kk**(-(npow+2.)/4.)*sqrt(-log(1-xi1))
+        c   = kk**((npow-2.)/4.)*sqrt(-log(1-xi1))
         phi = 2*pi*xi2
         aky = c*exp(1j*phi)
         xi1 = random.random(size=kk.shape)
         xi2 = random.random(size=kk.shape)
-        c   = kk**(-(npow+2.)/4.)*sqrt(-log(1-xi1))
+        c   = kk**((npow-2.)/4.)*sqrt(-log(1-xi1))
         phi = 2*pi*xi2
         akz = c*exp(1j*phi)
 

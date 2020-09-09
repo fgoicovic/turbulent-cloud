@@ -36,7 +36,7 @@ class OptionsParser:
                             dest     = "npow",
                             type     = float,
                             help     = "Power index of the power spectrum",
-                            default  = 4.)
+                            default  = -4.)
 
         self.parser.add_argument("-ngrid",
                             dest     = "ngrid",
@@ -50,6 +50,13 @@ class OptionsParser:
                             type     = float,
                             help     = "Radius of the sphere (in parsecs)",
                             default  = 1.)
+
+        self.parser.add_argument("-a", "-alpha",
+                            dest     = "alpha",
+                            type     = float,
+                            help     = "Ratio of kinetic energy to the\n"+\
+                                        "magnitude of gravitational energy",
+                            default  = 0.5)
 
         self.parser.add_argument("--units",
                             dest     = "units",

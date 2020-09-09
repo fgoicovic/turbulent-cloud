@@ -41,11 +41,11 @@ if __name__ == "__main__":
     vel = vg.add_turbulence(pos=pos, vel=vel)
 
     # now we need to normalize the velocity values
-    # we do it such that the cloud is marginally bound
+    # we do it according to the alpha value
     v2   = np.linalg.norm(vel, axis=1)**2
     ekin = np.sum(0.5*mpart*v2)
     epot = 3./5. * G * mcloud**2 / rcloud
-    kvel = np.sqrt(epot/(2*ekin))
+    kvel = np.sqrt(args.alpha*epot/ekin)
     vel *= kvel
 
     print("Writing output file {}...".format(args.outfile))
