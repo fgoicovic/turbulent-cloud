@@ -54,7 +54,8 @@ class OptionsParser:
         self.parser.add_argument("-a", "-alpha",
                             dest     = "alpha",
                             type     = float,
-                            help     = "Ratio of kinetic energy to potential energy",
+                            help     = "Ratio of kinetic energy to the\n"+\
+                                        "magnitude of gravitational energy",
                             default  = 0.5)
 
         self.parser.add_argument("--units",
