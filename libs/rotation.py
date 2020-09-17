@@ -30,9 +30,9 @@ class Rotation:
             self.erot = None
 
         else:           # we rescale beta for this method
-            if beta/alpha < 0.1: # 
+            if beta/alpha < 0.1: # linear range
                 self.erot = epot*beta
-            else:                # 
+            else:                # scaling range
                 self.erot = epot*alpha*beta/float(alpha-beta)
 
     def add_rotation(self, pos, vel, mass):
