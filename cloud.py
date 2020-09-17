@@ -3,6 +3,7 @@ from __future__ import print_function
 import numpy as np
 from libs.turbulence import VelocityGrid
 from libs.uniform_sphere import Sphere
+from libs.rotation import Rotation
 from libs.const import G, msol, parsec
 from libs.utils import save_particles
 from libs.options_parser import OptionsParser
@@ -42,17 +43,19 @@ if __name__ == "__main__":
 
     # now we need to normalize the velocity values
     # we do it according to the alpha value
-    v2   = np.linalg.norm(vel, axis=1)**2
-    ekin = np.sum(0.5*mpart*v2)
+    vtur = vel - np.mean(vel, axis=0)
+    vt2  = np.linalg.norm(vtur, axis=1)**2
+    etur = np.sum(0.5*mpart*vt2)
     epot = 3./5. * G * mcloud**2 / rcloud
-    kvel = np.sqrt(args.alpha*epot/ekin)
+    kvel = np.sqrt(args.alpha*epot/etur)
     vel *= kvel
+
+    # we manually add rotation if desired
+    rot = Rotation(beta=args.beta, alpha=args.alpha, epot=epot)
+    vel = rot.add_rotation(pos=pos, vel=vel, mass=mass)
+
 
     print("Writing output file {}...".format(args.outfile))
     save_particles(ids, pos, vel, mass, u, args.outfile, args.format, args.units)
 
     print("done...bye!")
-
-
-
-
