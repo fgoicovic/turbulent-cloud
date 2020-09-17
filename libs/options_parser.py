@@ -15,7 +15,8 @@ class OptionsParser:
         self.parser.add_argument("-o",
                             metavar = "outfile",
                             dest    = "outfile",
-                            help    = "Name of output file.",
+                            help    = "Name of output file.\n"+\
+                                      " [Default = ics_cloud.dat]",
                             default = "ics_cloud.dat")
 
         self.parser.add_argument("-format",
