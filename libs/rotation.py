@@ -39,7 +39,10 @@ class Rotation:
     def add_rotation(self, pos, vel, mass):
 
         if self.erot is None: return vel #nothing to do here
-
+        
+        # operate from center of mass
+        pos    -= mean(pos * mass[:,newaxis], axis=0)
+        
         # we set rotational energy according to beta
         # first we calculate the desired angular velocity
         Iz      = sum(mass * (pos[:,0]**2 + pos[:,1]**2))
