@@ -73,6 +73,14 @@ class OptionsParser:
                                        " [Default = None]",
                             default  = -1)
 
+        self.parser.add_argument("-g", "-gamma",
+                            dest     = "gamma",
+                            type     = float,
+                            help     = "Power index of the radial density "+\
+                                       "profile. \n"+\
+                                       " [Default = 0 (Uniform)]",
+                            default  = 0)
+
         self.parser.add_argument("--units",
                             dest     = "units",
                             help     = "Change units to Msol/Parsec/km s^{-1} ",

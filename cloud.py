@@ -24,13 +24,14 @@ if __name__ == "__main__":
 
     # first, determine position of particles given total number of
     # desired cells
-    cloud = Sphere(n=n, center=r_com, radius=rcloud)
-    dx    = cloud.dx
+    cloud = Sphere(n=n, center=r_com, radius=rcloud, mass=mcloud)
+    cloud.add_profile(gamma=args.gamma)
 
     pos   = cloud.pos
+    dx    = cloud.dx
     ngas  = cloud.npart
-    mpart = mcloud / ngas
-    mass  = np.full(ngas, mpart)
+    mass  = cloud.mass
+
     ids   = np.arange(1, ngas+1)
     u     = np.zeros(ngas)
     vel   = np.zeros((ngas, 3))
@@ -45,7 +46,7 @@ if __name__ == "__main__":
     # we do it according to the alpha value
     vtur = vel - np.mean(vel, axis=0)
     vt2  = np.linalg.norm(vtur, axis=1)**2
-    etur = np.sum(0.5*mpart*vt2)
+    etur = np.sum(0.5*mass*vt2)
     epot = 3./5. * G * mcloud**2 / rcloud
     kvel = np.sqrt(args.alpha*epot/etur)
     vel *= kvel
