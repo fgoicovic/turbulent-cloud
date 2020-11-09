@@ -10,7 +10,7 @@ from libs.const import msol, parsec
 def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
     n = len(pos)
-    # conversion for diffenet Units
+    # conversion for different Units
     if units:
         print("[Output Units Parsec / Msun / km/s]")
         pos  /= parsec
@@ -37,7 +37,7 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
         # Preparing every line to print to the file
         for i in range(n):
             # Formatting particle attributes
-            ie = '% d' % ids[i]
+            ie = '% d'    % ids[i]
             me = '% 3.8e' % mass[i]
             rx = '% 3.8e' % pos[i][0]
             ry = '% 3.8e' % pos[i][1]
@@ -67,16 +67,16 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
     elif format == 1:
         ngas = len(mass)
         npart = array([ngas, 0, 0, 0, 0, 0])
-        Nmass = array([mass[0], 0, 0, 0, 0, 0])
+        Nmass = array([0, 0, 0, 0, 0, 0])
         # Linearizing the 3D-array of the position and velocity
         pos = pos.ravel()
         vel = vel.ravel()
 
         dummy = zeros(npart[0])
-        time = 0.
-        redshift = 0.0  # double
-        flag_sfr = 0  # long
-        flag_feedback = 0  # long
+        time = 0.            # double
+        redshift = 0.0       # double
+        flag_sfr = 0         # int
+        flag_feedback = 0    # int
         bytesleft = 256 - 6*4 - 6*8 - 8 - 8 - 2*4 - 6*4
         fill = zeros(int(bytesleft/4.0), dtype=int)  # int
 
@@ -126,16 +126,16 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
     elif format == 2:
         ngas = len(mass)
         npart = array([ngas, 0, 0, 0, 0, 0])
-        Nmass = array([mass[0], 0, 0, 0, 0, 0])
+        Nmass = array([0, 0, 0, 0, 0, 0])
         # Linearizing the 3D-array of the position and velocity
         pos = pos.ravel()
         vel = vel.ravel()
 
         dummy = zeros(npart[0])
-        time = 0.
-        redshift = 0.0  # double
-        flag_sfr = 0  # long
-        flag_feedback = 0  # long
+        time = 0.            # double
+        redshift = 0.0       # double
+        flag_sfr = 0         # int
+        flag_feedback = 0    # int
         bytesleft = 256 - 6*4 - 6*8 - 8 - 8 - 2*4 - 6*4
         fill = zeros(int(bytesleft/4.0), dtype=int)  # int
 
@@ -173,7 +173,7 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(pack('f' * len(pos), *pos))
             f.write(pack('i', nbytes))
 
-           # Velocities
+            # Velocities
             f.write(pack('i', nbytes4))
             f.write(b'VEL ')
             f.write(pack('i', nbytes + 8))
