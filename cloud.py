@@ -46,9 +46,9 @@ if __name__ == "__main__":
     # we do it according to the alpha value
     vtur = vel - np.mean(vel, axis=0)
     vt2  = np.linalg.norm(vtur, axis=1)**2
-    etur = np.sum(0.5*mass*vt2)
-    epot = 3./5. * G * mcloud**2 / rcloud
-    kvel = np.sqrt(args.alpha*epot/etur)
+    etur = 0.5 * np.sum(mass * vt2)
+    epot = 3./5. * G * np.sum(mass)**2 / rcloud
+    kvel = np.sqrt(args.alpha * epot / etur)
     vel *= kvel
 
     # we manually add rotation if desired
