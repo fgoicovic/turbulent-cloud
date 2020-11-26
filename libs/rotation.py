@@ -53,7 +53,7 @@ class Rotation:
         omegay  = mean(omegaux[:,1] / norm(pos[:,[2,0]], axis=1)**2)
         omegaz  = mean(omegaux[:,2] / norm(pos[:,[0,1]], axis=1)**2)
 
-        omega_e  = array([omegax, omegay, omegaz])
+        omega_e = array([omegax, omegay, omegaz])
 
         # we add the new and subtract the old angular velocity
         vel += cross(array([0,0,omega_d]) - omega_e, pos)
@@ -61,9 +61,7 @@ class Rotation:
         # we re-normalize the velocities to preserve alpha relation
         # to do so, we measure the ratio ekin_old/ekin_new and
         # distribute it over all particles
-        vel2   = norm(vel, axis=1)**2
-        ekin_n = sum(mass * vel2)
-        ratio  = sum(ekin_o)/sum(ekin_n)
+        ratio = ekin_o / sum(mass * norm(vel, axis=1)**2)
 
         # in order not to affect omega, re-escale only vz if possible,
         # else the whole vector
