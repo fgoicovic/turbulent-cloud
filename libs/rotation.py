@@ -61,7 +61,8 @@ class Rotation:
         # we re-normalize the velocities to preserve alpha relation
         # to do so, we measure the ratio ekin_old/ekin_new and
         # distribute it over all particles
-        ratio = ekin_o / sum(mass * norm(vel, axis=1)**2)
+        vel2  = norm(vel, axis=1)**2
+        ratio = ekin_o / sum(mass * vel2)
 
         # in order not to affect omega, re-escale only vz if possible,
         # else the whole vector
