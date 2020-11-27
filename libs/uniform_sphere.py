@@ -60,7 +60,7 @@ class Sphere:
                         1: The profile is created by redistributing the
                            particles positions, considering they have equal
                            mass. In consecuence, a spherical gap may appear
-                           at the center if gamma >> 0.
+                           at the center if gamma > 0.
                         2: The profile is created by redistributing the
                            particles masses, without modifying their positions.
                            In consecuence, final total mass may be slightly
@@ -91,7 +91,6 @@ class Sphere:
 
                 # new min separation
                 dx = min(diff(unique(pos[0])))
-
 
                 self.pos  = transpose(pos) + self.center
                 self.dx   = dx

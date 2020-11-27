@@ -28,33 +28,32 @@ class Rotation:
         elif beta == -1:  # nothing to do here
             self.erot = None
 
-        else:           # we rescale beta for this method
+        else:             # rescale beta for this method
             print("Adding rotational energy with beta~{}".\
                    format(beta))
-            if beta/alpha < 0.1: # linear range
-                self.erot = epot*beta
-            else:                # scaling range
-                self.erot = epot*alpha*beta/float(alpha-beta)
+            self.erot = epot*alpha*beta/float(alpha-beta)
 
     def add_rotation(self, pos, vel, mass):
 
-        if self.erot is None: return vel #nothing to do here
-        
+        if self.erot is None: return vel # nothing to do here
+
         # operate from center of mass
-        pos    -= mean(pos * mass[:,newaxis], axis=0)
-        
+        pos     = pos - sum(pos * mass[:,newaxis], axis=0)/sum(mass)
+        ekin_o  = sum(mass * norm(vel, axis=1)**2)
+
         # we set rotational energy according to beta
         # first we calculate the desired angular velocity
         Iz      = sum(mass * (pos[:,0]**2 + pos[:,1]**2))
         omega_d = sqrt(2*self.erot/Iz)
 
         # now we measure the existing mean angular velocity
-        v2      = sum(vel**2, axis=1)
-        radii2  = sum(pos**2, axis=1)
-        sec2    = mean(sum(cross(array([0,0,1]),
-                                    pos/radii2[:,newaxis])**2, axis=1))
+        omegaux = cross(pos, vel)
 
-        omega_e = mean(cross(pos, vel) / radii2[:,newaxis], axis=0)*sec2
+        omegax  = mean(omegaux[:,0] / norm(pos[:,[1,2]], axis=1)**2)
+        omegay  = mean(omegaux[:,1] / norm(pos[:,[2,0]], axis=1)**2)
+        omegaz  = mean(omegaux[:,2] / norm(pos[:,[0,1]], axis=1)**2)
+
+        omega_e = array([omegax, omegay, omegaz])
 
         # we add the new and subtract the old angular velocity
         vel += cross(array([0,0,omega_d]) - omega_e, pos)
@@ -62,8 +61,8 @@ class Rotation:
         # we re-normalize the velocities to preserve alpha relation
         # to do so, we measure the ratio ekin_old/ekin_new and
         # distribute it over all particles
-        vel2  = sum(vel**2, axis=1)
-        ratio = sum(v2)/sum(vel2)
+        vel2  = norm(vel, axis=1)**2
+        ratio = ekin_o / sum(mass * vel2)
 
         # in order not to affect omega, re-escale only vz if possible,
         # else the whole vector
