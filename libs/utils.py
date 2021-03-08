@@ -1,9 +1,11 @@
 from __future__ import print_function
 
 from sys import exc_info, exit
+from os import path, remove
 from numpy import array, zeros, int
 from logging import warning
 from struct import pack
+from h5py import File
 
 from libs.const import msol, parsec
 
@@ -20,6 +22,15 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
     else:
         print("[Output Units CGS]")
 
+    if path.isfile(outfile):
+        print("WARNING: File {} already exist.".format(outfile))
+        print("Do yo want to overwrite it? Y/[N]")
+        q = input()
+        if q.lower() in ['y', 'yes', 's', 'si']:
+            remove(outfile)
+        else:
+            print('Exiting.')
+            exit()
 
     if format == 0:
         # Openning file
@@ -29,7 +40,7 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             msg = "IO Error({0}): {1}".format(e.errno, e.strerror)
             warning(msg)
         except:
-            print("Unexpected error: {}".format(sys.exc_info()[0]))
+            print("Unexpected error: {}".format(exc_info()[0]))
             raise
 
         id_space = len("{}".format(n))
@@ -215,6 +226,22 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(pack('i', nbytes))
             f.write(pack('f' * len(u), *u))
             f.write(pack('i', nbytes))
+
+    elif format == 3:
+        with File(outfile, "w") as f:
+            f.create_group("Header")
+            f.create_group("PartType0")
+            f["Header"].attrs["NumPart_ThisFile"] = [n,0,0,0,0,0]
+            f["Header"].attrs["MassTable"]        = [0,0,0,0,0,0]
+            f["Header"].attrs["Time"]             = 0.0
+            f["Header"].attrs["Redshift"]         = 0.0
+            f["Header"].attrs["Flag_Sfr"]         = 0
+            f["Header"].attrs["Flag_Feedback"]    = 0
+            f["PartType0"].create_dataset("Masses",         data=mass)
+            f["PartType0"].create_dataset("Coordinates",    data=pos)
+            f["PartType0"].create_dataset("Velocities",     data=vel)
+            f["PartType0"].create_dataset("ParticleIDs",    data=ids)
+            f["PartType0"].create_dataset("InternalEnergy", data=u)
 
     else:
         print("Format {} unknown or not implemented. Exiting.".format(format))
