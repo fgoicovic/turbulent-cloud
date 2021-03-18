@@ -2,7 +2,7 @@ from __future__ import print_function
 
 from sys import exc_info, exit
 from os import path, remove
-from numpy import array, zeros, int
+from numpy import array, zeros, uint32, int, int32, float32
 from logging import warning
 from struct import pack
 from h5py import File
@@ -11,7 +11,7 @@ from libs.const import msol, parsec
 
 def save_particles(ids, pos, vel, mass, u, outfile, format, units):
 
-    n = len(pos)
+    ngas = len(mass)
     # conversion for different Units
     if units:
         print("[Output Units Parsec / Msun / km/s]")
@@ -43,10 +43,10 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             print("Unexpected error: {}".format(exc_info()[0]))
             raise
 
-        id_space = len("{}".format(n))
+        id_space = len("{}".format(ngas))
 
         # Preparing every line to print to the file
-        for i in range(n):
+        for i in range(ngas):
             # Formatting particle attributes
             ie = '% d'    % ids[i]
             me = '% 3.8e' % mass[i]
@@ -76,7 +76,6 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
         ofile.close()
 
     elif format == 1:
-        ngas = len(mass)
         npart = array([ngas, 0, 0, 0, 0, 0])
         Nmass = array([0, 0, 0, 0, 0, 0])
         # Linearizing the 3D-array of the position and velocity
@@ -135,7 +134,6 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
             f.write(pack('i', nbytes))
 
     elif format == 2:
-        ngas = len(mass)
         npart = array([ngas, 0, 0, 0, 0, 0])
         Nmass = array([0, 0, 0, 0, 0, 0])
         # Linearizing the 3D-array of the position and velocity
@@ -231,17 +229,17 @@ def save_particles(ids, pos, vel, mass, u, outfile, format, units):
         with File(outfile, "w") as f:
             f.create_group("Header")
             f.create_group("PartType0")
-            f["Header"].attrs["NumPart_ThisFile"] = [n,0,0,0,0,0]
-            f["Header"].attrs["MassTable"]        = [0,0,0,0,0,0]
+            f["Header"].attrs["NumPart_ThisFile"] = array([ngas,0,0,0,0,0], dtype=uint32)
+            f["Header"].attrs["MassTable"]        = [0.,0.,0.,0.,0.,0.]
             f["Header"].attrs["Time"]             = 0.0
             f["Header"].attrs["Redshift"]         = 0.0
-            f["Header"].attrs["Flag_Sfr"]         = 0
-            f["Header"].attrs["Flag_Feedback"]    = 0
-            f["PartType0"].create_dataset("Masses",         data=mass)
-            f["PartType0"].create_dataset("Coordinates",    data=pos)
-            f["PartType0"].create_dataset("Velocities",     data=vel)
-            f["PartType0"].create_dataset("ParticleIDs",    data=ids)
-            f["PartType0"].create_dataset("InternalEnergy", data=u)
+            f["Header"].attrs["Flag_Sfr"]         = int32(0)
+            f["Header"].attrs["Flag_Feedback"]    = int32(0)
+            f["PartType0"].create_dataset("Masses",         data=mass.astype(float32))
+            f["PartType0"].create_dataset("Coordinates",    data=pos.astype(float32))
+            f["PartType0"].create_dataset("Velocities",     data=vel.astype(float32))
+            f["PartType0"].create_dataset("ParticleIDs",    data=ids.astype(int32))
+            f["PartType0"].create_dataset("InternalEnergy", data=u.astype(float32))
 
     else:
         print("Format {} unknown or not implemented. Exiting.".format(format))
