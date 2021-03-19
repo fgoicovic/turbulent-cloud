@@ -22,9 +22,10 @@ class OptionsParser:
         self.parser.add_argument("-format",
                             dest    = "format",
                             type    = int,
-                            help    = "Format of output file.\n0 = ASCII,\n"+\
+                            help    = "Format of output file:\n0 = ASCII,\n"+\
                                        "1 = Gadget binary format 1,\n"+\
-                                       "2 = Gadget binary format 2. \n"+\
+                                       "2 = Gadget binary format 2,\n"+\
+                                       "3 = HDF5 format. \n"+\
                                        " [Default = 1]",
                             default = 1)
 
